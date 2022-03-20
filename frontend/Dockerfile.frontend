@@ -1,0 +1,21 @@
+#Build Stage Start
+
+#Specify a base image
+FROM node:14-alpine as builder 
+
+#Specify a working directory
+WORKDIR '/app'
+
+#Copy the dependencies file
+COPY frontend/package.json .
+
+#Install dependencies
+RUN npm install
+
+#Copy remaining files
+COPY ./frontend .
+
+#Build the project for production
+RUN npm run build && npm install -g serve
+EXPOSE 3000
+CMD ["serve", "-s", "build"]
